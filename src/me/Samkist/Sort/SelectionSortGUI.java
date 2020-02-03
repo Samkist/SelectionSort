@@ -41,6 +41,8 @@ public class SelectionSortGUI extends GBFrame {
             builder.append("Median: " + getMedian(s.get()) + "\n");
             builder.append("Mode(s): ");
             getModes(s.get()).forEach(i -> builder.append(i + " "));
+            builder.append("\n");
+            builder.append("Standard Deviation: " + getStandardDeviation(s.get()));
             outputField.setText(builder.toString());
         }
         if(jButton.equals(reset)) {
@@ -51,6 +53,16 @@ public class SelectionSortGUI extends GBFrame {
 
     public SelectionSortGUI() {
         outputField.setEditable(false);
+    }
+
+    private double getStandardDeviation(ArrayList<Integer> arr) {
+        double mean = getMean(arr);
+        double total = 0;
+        for(int i = 0; i < arr.size(); i++) {
+            total += Math.pow((arr.get(i) - mean), 2);
+        }
+        double mean2 = total/arr.size();
+        return Math.sqrt(mean2);
     }
 
     private double getMean(ArrayList<Integer> arr) {
@@ -75,19 +87,19 @@ public class SelectionSortGUI extends GBFrame {
             occ.put(i, occ.get(i) + 1);
         }
         AtomicReference<Integer> highestValue = new AtomicReference<>(0);
-        ArrayList<Integer> greatestKeys = new ArrayList<>();
+        ArrayList<Integer> modes = new ArrayList<>();
         occ.entrySet().forEach(i -> {
             if(i.getValue().compareTo(highestValue.get()) > 0) {
-                greatestKeys.removeAll(greatestKeys);
+                modes.clear();
                 highestValue.set(i.getValue());
-                greatestKeys.add(i.getKey());
+                modes.add(i.getKey());
             }
-            if(i.getValue().compareTo(highestValue.get()) == 0 && !greatestKeys.contains(i.getKey())) {
-                greatestKeys.add(i.getKey());
+            if(i.getValue().compareTo(highestValue.get()) == 0 && !modes.contains(i.getKey())) {
+                modes.add(i.getKey());
             }
         });
-        if(greatestKeys.containsAll(s.get()))
+        if(modes.containsAll(s.get()))
             return s.get();
-        return greatestKeys;
+        return modes;
     }
 }

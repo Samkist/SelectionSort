@@ -23,7 +23,6 @@ public class Sorter<T extends Comparable<T>> {
                 if(list.get(j).compareTo(list.get(min)) < 0)
                     min = j;
             }
-
             if(min != i) {
                 T a = list.get(min);
                 T b = list.get(i);
